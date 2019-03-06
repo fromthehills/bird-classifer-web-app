@@ -8,7 +8,7 @@ from io import BytesIO
 from fastai import *
 from fastai.vision import *
 
-export_file_url = 'https://drive.google.com/uc?export=download&id=1O9iFs_Ro055EZ0kryl1gZ1XdWF8fmCid'
+export_file_url = 'https://drive.google.com/uc?export=download&id=1fLHJthLSvM7nd8k6GMen56mZMAiT0MOE'
 export_file_name = 'export.pkl'
 classes = ['arctic_tern', 'barn_owl', 'barnacle_goose', 'bar-tailed_godwit', 
             'black_redstart', 'blackbird', 'black-tailed_godwit', 'blue_tit', 
@@ -57,8 +57,8 @@ async def analyze(request):
     data = await request.form()
     img_bytes = await (data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
-    return JSONResponse({'result': str(prediction)})
+    pred_class,pred_idx,outputs = learn.predict(img)
+    return JSONResponse({'result': str(pred_class.obj).title()})
 
 if __name__ == '__main__':
     if 'serve' in sys.argv: uvicorn.run(app, host='0.0.0.0', port=8080)
